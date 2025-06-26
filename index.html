@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <title>Im UII</title>
+</head>
+<body>
+  <div class="hover-area">
+    <!-- Musik -->
+    <audio id="bg-music" src="./asset/music.mp3" loop></audio>
+
+    <!-- Tombol Musik -->
+    <button id="toggle-music-button">
+      <i id="music-icon" class="fas fa-play"></i>
+    </button>
+  </div>
+  <div class="container">
+    <a-scene
+      mindar-image="imageTargetSrc: ./asset/targets2.mind;"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      embedded
+      color-space="sRGB"
+      renderer="precision: mediump">
+      
+    <a-assets>
+        <img id="layer1" src="./asset/img1.png" />
+        <img id="layer2" src="./asset/img2.png" />
+        <img id="layer3" src="./asset/img3.png" />
+        <img id="layer4" src="./asset/img4.png" />
+      </a-assets>
+      <a-camera class="a-camera" look-controls="enabled: false"></a-camera>
+      <!-- Target index 0 -->
+      <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+        <a-image src="#layer1" position="0 0 0.4" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer2" position="0 0 0.3" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer3" position="0 0 0.2" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer4" position="0 0 0.1" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+      </a-entity>
+
+      <!-- Target index 1 -->
+      <a-entity id="example-target" mindar-image-target="targetIndex: 1">
+        <a-image src="#layer1" position="0 0 0.4" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer2" position="0 0 0.3" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer3" position="0 0 0.2" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+        <a-image src="#layer4" position="0 0 0.1" width="1" height="1" transparent="true" alpha-test="0.5"></a-image>
+      </a-entity>
+
+    </a-scene>
+  </div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const audio = document.querySelector("#bg-music");
+  const toggleBtn = document.querySelector("#toggle-music-button");
+  const icon = document.querySelector("#music-icon");
+  const exampleTarget = document.querySelector('#example-target');
+
+      // Klik tombol manual
+      toggleBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play();
+          icon.classList.replace("fa-play", "fa-pause");
+        } else {
+          audio.pause();
+          icon.classList.replace("fa-pause", "fa-play");
+        }
+      });
+
+      // Saat marker terdeteksi
+      exampleTarget.addEventListener("targetFound", () => {
+        toggleBtn.style.display = "block"; // tampilkan tombol
+        audio.play();
+        icon.classList.replace("fa-play", "fa-pause");
+      });
+
+      // Saat marker hilang
+      exampleTarget.addEventListener("targetLost", () => {
+        toggleBtn.style.display = "none"; // sembunyikan tombol
+        audio.pause();
+        icon.classList.replace("fa-pause", "fa-play");
+      });
+  });
+
+</script>
+</html>
